@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>LIST USER</title>
+
+<style>
+	table, tr, th, td {
+		padding: 8px;
+		text-align: center;
+		margin: auto;
+		border: 1px solid black;
+		border-collapse: collapse;
+	}
+</style>
+
+</head>
+<body>
+<h1>LIST USER</h1>
+<hr>
+<table>
+	<tr>
+		<th>USERNAME</th>
+		<th>PASSWORD</th>
+		<th>ROLE</th>
+		<th>FULL NAME</th>
+		<th>EMAIL</th>
+		<th>TEL</th>
+		<th>ENABLE</th>
+	</tr>
+	<tr th:each="user : ${listUser}">
+		<td th:text="${user.username}"></td>
+		<td th:text="${user.password}"></td>
+		<td th:text="${user.role}"></td>
+		<td th:text="${user.fullname}"></td>
+		<td th:text="${user.email}"></td>
+		<td th:text="${user.tel}"></td>
+		<td th:text="${user.enable}"></td>
+	</tr>
+</table>
+
+</body>
+</html>

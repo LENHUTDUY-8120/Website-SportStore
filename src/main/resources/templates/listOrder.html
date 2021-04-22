@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<style>
+	table, tr, th, td {
+		padding: 8px;
+		text-align: center;
+		margin: auto;
+		border: 1px solid black;
+		border-collapse: collapse;
+	}
+</style>
+</head>
+<body>
+<h1>LIST ORDER</h1>
+<hr>
+<table>
+	<tr>
+		<th>ID</th>
+		<th>Customer</th>
+		<th>Address</th>
+		<th>Email</th>
+		<th>Telephone</th>
+		<th>total</th>
+		<th>additional_info</th>
+		<th>process</th>
+		<th>view</th>
+	</tr>
+	<tr th:each="listOrder : ${listorder}">
+		<th th:text="${listOrder.id}"></th>
+		<td th:text="${listOrder.fullname}"></td>
+		<td th:text="${listOrder.address}"></td>
+		<td th:text="${listOrder.email}"></td>
+		<td th:text="${listOrder.tel}"></td>
+		<td th:text="${listOrder.total}"></td>
+		<td th:text="${listOrder.additional_info}"></td>
+		<td th:utext="${listOrder.process} == 1 ? 'yes' : 'no'"></td>
+		<th><a th:href="@{/admin/list_order_detail(id=${listOrder.id})}" target="_blank" class="material-icons">&#xE241;></a></th>
+	</tr>
+</table>
+</body>
+</html>

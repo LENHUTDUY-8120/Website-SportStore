@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8">
+		<title>Bootstrap E-commerce Templates</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<!--[if ie]><meta content='IE=8' http-equiv='X-UA-Compatible'/><![endif]-->	
+		<!-- bootstrap -->
+		<link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">      
+		<link th:href="@{/bootstrap/css/bootstrap-responsive.min.css}" rel="stylesheet">		
+		<link th:href="@{/themes/css/bootstrappage.css}" rel="stylesheet"/>
+		
+		<!-- global styles -->
+		<link th:href="@{/themes/css/flexslider.css}" rel="stylesheet"/>
+		<link th:href="@{/themes/css/main.css}" rel="stylesheet"/>
+
+		<!-- scripts -->
+		<script th:src="@{/themes/js/jquery-1.7.2.min.js}"></script>
+		<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>				
+		<script th:src="@{/themes/js/superfish.js}"></script>	
+		<script th:src="@{/themes/js/jquery.scrolltotop.js}"></script>
+		<!--[if lt IE 9]>			
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+			<script src="js/respond.min.js"></script>
+		<![endif]-->
+	</head>
+    <body>		
+		<div id="top-bar" class="container">
+			<div class="row">
+				<div class="span4">
+					<form th:action="@{/products/search}" method="GET" class="search_form">
+						<input type="text" name="search" style="color:black;" class="input-block-level search-query" Placeholder="ex. title,brand,categori...">
+					</form>
+				</div>
+				<div class="span8">
+					<div class="account pull-right">
+						<ul class="user-menu">				
+							<li><a th:href="@{/}" th:utext="${acc} ? ${acc} : ''"></a></li>
+							<li><a th:href="@{/cart}">Your Cart</a></li>				
+							<th:block th:if="!${acc}"><li><a th:href="@{/login}">Login</a></li></th:block>
+							<th:block th:if="${acc}"><li><a th:href="@{/logout}">Logout</a></li></th:block>		
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="wrapper" class="container">
+			<section class="navbar main-menu">
+				<div class="navbar-inner main-menu">				
+					<a href="index.html" class="logo pull-left"><img src="themes/images/logo.png" class="site_logo" alt=""></a>
+					<nav id="menu" class="pull-right">
+						<ul>
+							<li>
+								<a th:href="@{/product}">ALL PRODUCT</a>
+							</li>
+							<li><a th:href="@{/product}">CATEGORY</a>					
+								<ul>
+									<li><a th:href="@{/product(by='categori',name='clb')}">CLUB</a></li>
+									<li><a th:href="@{/product(by='categori',name ='nation')}">DOI TUYEN</a></li>
+								</ul>
+							</li>																	
+							<li><a th:href="@{/product}">MANUFACTURES</a>
+								<ul>									
+									<li><a th:href="@{/product(by='brand',name='NIKE')}">NIKE</a></li>
+									<li><a th:href="@{/product(by='brand',name='ADIDAS')}">ADIDAS</a></li>
+									<li><a th:href="@{/product(by='brand',name='PUMA')}">PUMA</a></li>
+								</ul>
+							</li>							
+						</ul>
+					</nav>
+				</div>
+			</section>
+			<section class="header_text sub">
+			<img class="pageBanner" src="themes/images/pageBanner.png" alt="New products" >
+				<h4><span>Product Detail</span></h4>
+			</section>
+			<section class="main-content">				
+				<div class="row">						
+					<div class="span9">
+						<div class="row">
+							<div class="span4">
+								<a class="thumbnail" data-fancybox-group="group1" title="Description 1"><img alt="" th:src="@{${product.image}}"></a>												
+							</div>
+							<form class="form-inline" th:action="@{/addCart}">
+								<div class="span5">
+									<address>
+										<strong>Brand:</strong> <span th:text="${product.brand}"></span><br>
+										<strong>Product Code:</strong> <input style="width:40px" type="text" name="id" th:value="${product.id}" readonly><br>
+										<strong>Reward Points:</strong> <span th:text="${product.rewardpoint}"></span><br>
+										<strong>Availability:</strong> <span th:text="${product.availability}"></span><br>								
+									</address>									
+									<h4><strong th:text="'Price: $' + ${product.price}">Price:</strong></h4>
+								</div>
+								<div class="span5">
+										<p>&nbsp;</p>
+										<label>Quantity:</label>
+										<input type="number" class="span1" name="quantity" value=1 min=1>
+										<input class="btn btn-inverse" type="submit" value="Add to Cart">
+								</div>	
+							</form>						
+						</div>
+						<div class="row">
+							<div class="span9">
+								<ul class="nav nav-tabs" id="myTab">
+									<li class="active"><a href="#home">Description</a></li>
+									<li class=""><a href="#profile">Additional Information</a></li>
+								</ul>							 
+								<div class="tab-content">
+									<div class="tab-pane active" id="home" th:text="${product.descriptions}"></div>
+									<div class="tab-pane" id="profile">
+										<table class="table table-striped shop_attributes">	
+											<tbody>
+												<tr class="">
+													<th>Size</th>
+													<td th:text="${product.size}"></td>
+												</tr>								
+											</tbody>
+										</table>
+									</div>
+								</div>							
+							</div>						
+							<div class="span9">	
+								<br>
+								<h4 class="title">
+									<span class="pull-left"><span class="text"><strong>Related</strong> Products</span></span>
+									<span class="pull-right">
+										<a class="left button" href="#myCarousel-1" data-slide="prev"></a><a class="right button" href="#myCarousel-1" data-slide="next"></a>
+									</span>
+								</h4>
+								<div id="myCarousel-1" class="carousel slide">
+									<div class="carousel-inner">
+										<div class="active item">
+											<ul class="thumbnails listing-products">
+												<li class="span3" th:each=" relate : ${relate}">
+													<div class="product-box">
+														<span class="sale_tag"></span>												
+														<a th:href="@{/productDT(id=${relate.id})}"><img alt="" th:src="@{${relate.image}}"></a><br/>
+														<a th:href="@{/productDT(id=${relate.id})}" class="title" th:text="${relate.title}"></a><br/>
+														<a th:href="@{/productDT(id=${relate.id})}" class="category" th:text="${relate.brand}"></a>
+														<p class="price" th:text="'$' + ${relate.price}"></p>
+													</div>
+												</li>												
+											</ul>
+										</div>
+										<div class="item">
+											<ul class="thumbnails listing-products">
+												<li class="span3" th:each=" relate1 : ${relate1}">
+													<div class="product-box">
+														<span class="sale_tag"></span>												
+														<a th:href="@{/productDT(id=${relate1.id})}"><img alt="" th:src="@{${relate1.image}}"></a><br/>
+														<a th:href="@{/productDT(id=${relate1.id})}" class="title" th:text="${relate1.title}"></a><br/>
+														<a th:href="@{/productDT(id=${relate1.id})}" class="category" th:text="${relate1.brand}"></a>
+														<p class="price" th:text="'$' + ${relate1.price}"></p>
+													</div>
+												</li>       											
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="span3 col">
+						<div class="block">	
+							<ul class="nav nav-list">
+								<li class="nav-header">SIZE</li>
+								<li><a th:href="@{/product(by='size',name='XL')}">XL</a></li>
+								<li><a th:href="@{/product(by='size',name='L')}">L</a></li>
+								<li><a th:href="@{/product(by='size',name='M')}">M</a></li>
+							</ul>
+							<br/>
+							<ul class="nav nav-list below">
+								<li class="nav-header">MANUFACTURES</li>
+								<li><a th:href="@{/product(by='brand',name='ADIDAS')}">Adidas</a></li>
+								<li><a th:href="@{/product(by='brand',name='NIKE')}">Nike</a></li>
+								<li><a th:href="@{/product(by='brand',name='PUMA')}">PUMA</a></li>
+							</ul>
+						</div>
+						<div class="block">
+							<h4 class="title">
+								<span class="pull-left"><span class="text">Randomize</span></span>
+								<span class="pull-right">
+									<a class="left button" href="#myCarousel" data-slide="prev"></a><a class="right button" href="#myCarousel" data-slide="next"></a>
+								</span>
+							</h4>
+							<div id="myCarousel" class="carousel slide">
+								<div class="carousel-inner">
+									<div class="active item">
+										<ul class="thumbnails listing-products">
+											<li class="span3">
+												<div class="product-box">
+													<span class="sale_tag"></span>												
+													<img alt="" th:href="@{/productDT(id=${random1.id})}" th:src="@{${random1.image}}"><br/>
+													<a th:href="@{/productDT(id=${random1.id})}" class="title" th:text="${random1.title}"></a><br/>
+													<a th:href="@{/productDT(id=${random1.id})}" class="category" th:text="${random1.brand}"></a>
+													<p class="price" th:text="'$' + ${random1.price}"></p>
+												</div>
+											</li>
+										</ul>
+									</div>
+									<div class="item" th:each="random : ${random}">
+										<ul class="thumbnails listing-products">
+											<li class="span3">
+												<div class="product-box">												
+													<img alt="" th:href="@{/productDT(id=${random.id})}" th:src="@{${random.image}}"><br/>
+													<a th:href="@{/productDT(id=${random.id})}" class="title" th:text="${random.title}"></a><br/>
+													<a th:href="@{/productDT(id=${random.id})}" class="category" th:text="${random.brand}"></a>
+													<p class="price" th:text="'$' + ${random.price}"></p>
+												</div>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="block">								
+							<h4 class="title"><strong>Best</strong> Seller</h4>								
+							<ul class="small-product">
+								<li th:each="bs : ${bestseller}">
+									<a th:href="@{/productDT(id=${bs.id})}" title="Praesent tempor sem sodales">
+										<img th:href="@{/productDT(id=${bs.id})}" th:src="@{${bs.image}}" alt="Praesent tempor sem sodales">
+									</a>
+									<a th:href="@{/productDT(id=${bs.id})}" th:text="${bs.title}"></a>
+								</li>   
+							</ul>
+						</div>
+					</div>
+				</div>
+			</section>			
+			<section id="footer-bar">
+				<div class="row">
+					<div class="span3">
+						<h4>Navigation</h4>
+						<ul class="nav">
+							<li><a th:href="@{/}">Homepage</a></li>  
+							<li><a th:href="@{/cart}">Your Cart</a></li>
+						
+						</ul>					
+					</div>
+					<div class="span4">
+						<h4>My Account</h4>
+						<ul class="nav">
+							<li><a href="#">My Account</a></li>
+							<li><a href="#">Order History</a></li>
+						</ul>
+					</div>
+					<div class="span5">
+						<p class="logo"><img th:src="@{/themes/images/logo.png}" class="site_logo" alt=""></p>
+						<p>GENUINE MEN'S FEMALE SPORTS CLOTHES HIGHLIGHTS</p>
+						<br/>
+					</div>					
+				</div>	
+			</section>
+			<section id="copyright">
+				<span>Copyright 2013 bootstrappage template  All right reserved.</span>
+			</section>
+		</div>
+		<script th:src="@{/themes/js/common.js}"></script>
+		<script>
+			$(function () {
+				$('#myTab a:first').tab('show');
+				$('#myTab a').click(function (e) {
+					e.preventDefault();
+					$(this).tab('show');
+				})
+			})
+			$(document).ready(function() {
+				$('.thumbnail').fancybox({
+					openEffect  : 'none',
+					closeEffect : 'none'
+				});
+				
+				$('#myCarousel-2').carousel({
+                    interval: 2500
+                });								
+			});
+		</script>
+    </body>
+</html>

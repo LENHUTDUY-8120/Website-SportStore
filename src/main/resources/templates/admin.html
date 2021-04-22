@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Admin Management</title>
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+	<h1>Admin Management</h1>
+	
+	<hr>
+	
+	<ul>
+		<li><a th:href="@{/admin/manageproduct}">MANAGE PRODUCT</a></li>
+		<li><a th:href="@{/admin/list_user}">LIST USER</a></li>
+		<li><a th:href="@{/admin/list_order}">LIST ORDER</a></li>
+	</ul>
+</body>
+</html>

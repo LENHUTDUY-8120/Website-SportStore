@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<style type="text/css">
+	* {
+	    outline: none
+	}
+	
+	@font-face {
+	    font-family: Roboto;
+	    src: url('https://res.cloudinary.com/dxfq3iotg/raw/upload/v1585021315/Roboto-Regular.ttf')
+	}
+	
+	body {
+	    background-color: blue;
+	    font-family: Roboto
+	}
+	
+	.mt-100 {
+	    margin-top: 150px
+	}
+	
+	.modal-content {
+	    border-radius: 0.7rem
+	}
+	
+	@media(width:1024px) {
+	    .modal-dialog {
+	        max-width: 700px
+	    }
+	}
+	
+	.modal-title {
+	    text-align: center;
+	    font-size: 3vh;
+	    font-weight: bold
+	}
+	
+	h4 {
+	    margin-left: auto
+	}
+	
+	.modal-header {
+	    border-bottom: none;
+	    text-align: center;
+	    padding-bottom: 0
+	}
+	
+	h6 {
+	    color: rgb(2, 55, 230);
+	    margin-top: 2vh;
+	    margin-bottom: 0;
+	    font-size: 2vh
+	}
+	
+	.modal-body {
+	    padding: 2vh
+	}
+	
+	.modal-footer {
+	    border-top: none;
+	    justify-content: center;
+	    padding-top: 0
+	}
+	
+	.row {
+	    border-bottom: 1px solid rgba(0, 0, 0, .2);
+	    padding: 2vh 0 2vh 0;
+	    justify-content: space-between;
+	    flex-wrap: unset;
+	    margin: 0
+	}
+	
+	ul {
+	    padding: 0;
+	    display: flex;
+	    flex-direction: column;
+	    justify-content: space-around
+	}
+	
+	ul li {
+	    font-size: 2vh;
+	    font-weight: bold;
+	    line-height: 4vh
+	}
+	
+	.left {
+	    float: left;
+	    font-weight: normal;
+	    color: rgb(126, 123, 123)
+	}
+	
+	.right {
+	    float: right;
+	    text-align: right
+	}
+	
+	.col {
+	    padding-left: 0
+	}
+	
+	@media(min-width:1025px) {
+	    img {
+	        width: 70%
+	    }
+	}
+	
+	.btn {
+	    background-color: rgb(2, 55, 230);
+	    border-color: rgb(2, 55, 230);
+	    color: white;
+	    width: 90%;
+	    padding: 2vh;
+	    margin-top: 0;
+	    border-radius: 0.7rem;
+	    box-shadow: none
+	}
+	
+	.openmodal {
+	    background-color: white;
+	    color: black;
+	    width: 30vw
+	}
+	
+	:-moz-any-link:focus {
+	    outline: none
+	}
+	
+	button:active {
+	    outline: none
+	}
+	
+	button:focus {
+	    outline: none
+	}
+	
+	.btn:focus {
+	    box-shadow: none
+	}
+</style>
+
+<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+
+<script type="text/javascript">
+		
+		function updatecart() {
+		  	var cart_item = document.getElementsByClassName("cart-items")[0];
+		  	var cart_rows = cart_item.getElementsByClassName("cart-row");
+		  	var total = 0;
+		  	for (var i = 0; i < cart_rows.length; i++) {
+		    	var cart_row = cart_rows[i];
+		    	var price_item = cart_row.getElementsByClassName("cart-price")[0];
+		    	var quantity_item = cart_row.getElementsByClassName("cart-quantity-input")[0];
+		    	var price = parseFloat(price_item.innerHTML.substr(8));
+		    	var quantity = parseInt(quantity_item.innerHTML.substr(10));
+		    	document.getElementsByClassName("sub-total")[i].innerText ='sub-total: $'+(price * quantity);
+		    	total = total + (price * quantity);
+		 	}
+		document.getElementsByClassName("cart-total-price")[0].innerText = 'Total: $' + total;
+		}
+		
+</script>
+</head>
+<body onload="updatecart()">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-body">
+                    <div class="container">
+                    	<h6>Customer</h6>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <ul th:type="none">
+                                    <li class="left">Name:</li>
+                                    <li class="left">TelL:</li>
+                                    <li class="left">Email:</li>
+                                    <li class="left">Address:</li>
+                                    <li class="left">Additional info:</li>
+                                </ul>
+                            </div>
+                            <div class="col-xs-6">
+                                <ul class="right" th:type="none">
+                                    <li class="right" th:text="${order.fullname}"></li>
+                                    <li class="right" th:text="${order.tel}"></li>
+                                    <li class="right" th:text="${order.email}"></li>
+                                    <li class="right" th:text="${order.address}"></li>
+                                    <li class="right" th:text="${order.additional_info}"></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="container">
+                        <h6>List items</h6>
+                        <div class="cart-items">
+	                        <div class="row cart-row" th:each="item: ${listItem}">
+	                            <div class="col"> <img class="img-fluid" th:src="@{${item.image}}"> </div>
+	                            <div class="col-xs-6" style="padding-top: 2vh;">
+	                                <ul th:type="none">
+	                                    <li th:text="'Size: ' + ${item.product.size}"></li>
+	                                    <li th:text="'Brand: ' + ${item.product.brand}"></li>
+	                                    <li class="cart-price" th:text="'Price: $' + ${item.price}"></li>
+	                                    <li class="cart-quantity-input" th:text="'Quantity: ' + ${item.quantity}"></li>
+	                                    <li class="sub-total"></li>
+	                                </ul>
+	                            </div>
+	                        </div>
+                    	</div>
+                        <h6>Order Details</h6>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <ul th:type="none">
+                                    <li class="left">Order number:</li>
+                                    <li class="left">Total Price:</li>
+                                </ul>
+                            </div>
+                            <div class="col-xs-6">
+                                <ul class="right" th:type="none">
+                                    <li class="right" th:text="${order.id}"></li>
+                                    <li class="right cart-total-price"></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- Modal footer -->
+                <div class="modal-footer"> <a th:href="@{/admin/checkOrder(id=${order.id})}" type="button" style="margin: auto; border: 1px black solid;" class="material-icons">&#xf04b;</a></div>
+            </div>
+        </div>
+</body>
+</html>

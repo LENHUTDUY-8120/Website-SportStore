@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8">
+		<title>Bootstrap E-commerce Templates</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<!--[if ie]><meta content='IE=8' http-equiv='X-UA-Compatible'/><![endif]-->
+		<!-- bootstrap -->
+		<link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">      
+		<link th:href="@{/bootstrap/css/bootstrap-responsive.min.css}" rel="stylesheet">		
+		<link th:href="@{/themes/css/bootstrappage.css}" rel="stylesheet"/>
+		
+		<!-- global styles -->
+		<link th:href="@{/themes/css/flexslider.css}" rel="stylesheet"/>
+		<link th:href="@{/themes/css/main.css}" rel="stylesheet"/>
+
+		<!-- scripts -->
+		<script th:src="@{/themes/js/jquery-1.7.2.min.js}"></script>
+		<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>				
+		<script th:src="@{/themes/js/superfish.js}"></script>	
+		<script th:src="@{/themes/js/jquery.scrolltotop.js}"></script>
+		
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        
+        <script type="text/javascript">
+		
+		function updatecart() {
+		  	var cart_item = document.getElementsByClassName("cart-items")[0];
+		  	var cart_rows = cart_item.getElementsByClassName("cart-row");
+		  	var total = 0;
+		  	for (var i = 0; i < cart_rows.length; i++) {
+		    	var cart_row = cart_rows[i];
+		    	var price_item = cart_row.getElementsByClassName("cart-price")[0];
+		    	var quantity_item = cart_row.getElementsByClassName("cart-quantity-input")[0];
+		    	var price = parseFloat(price_item.innerHTML.substr(1));
+		    	var quantity = parseInt(quantity_item.value);
+		    	document.getElementsByClassName("sub-total")[i].innerText = (price * quantity);
+		    	total = total + (price * quantity);
+		 	}
+			document.getElementsByClassName("cart-total-price")[0].innerText = '$' + total;
+		}
+		</script>
+	</head>
+    <body onload="updatecart()">		
+		<div id="top-bar" class="container">
+			<div class="row">
+				<div class="span4">
+					<form th:action="@{/products/search}" method="GET" class="search_form">
+						<input type="text" name="search" style="color:black;" class="input-block-level search-query" Placeholder="ex. title,brand,categori...">
+					</form>
+				</div>
+				<div class="span8">
+					<div class="account pull-right">
+						<ul class="user-menu">				
+							<li><a th:href="@{#}" th:utext="${user} ? ${user.fullname} : ''"></a></li>
+							<li><a th:href="@{/cart}">Your Cart</a></li>					
+							<th:block th:if="!${user}"><li><a th:href="@{/login}">Login</a></li></th:block>
+							<th:block th:if="${user}"><li><a th:href="@{/logout}">Logout</a></li></th:block>				
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="wrapper" class="container">
+			<section class="navbar main-menu">
+				<div class="navbar-inner main-menu">				
+					<a href="index.html" class="logo pull-left"><img src="themes/images/logo.png" class="site_logo" alt=""></a>
+					<nav id="menu" class="pull-right">
+						<ul>
+							<li><a th:href="@{/./products.html}">CATEGORY</a>					
+								<ul>
+									<li><a th:href="@{/./products.html}">CLB</a></li>
+									<li><a th:href="@{/./products.html}">DOI TUYEN</a></li>
+								</ul>
+							</li>																	
+							<li><a href="@{/./products.html}">MANUFACTURES</a>
+								<ul>									
+									<li><a th:href="@{/./products.html}">NIKE</a></li>
+									<li><a th:href="@{/./products.html}">ADIDAS</a></li>
+									<li><a th:href="@{/./products.html}">PUMA</a></li>
+								</ul>
+							</li>							
+							<li><a th:href="@{/./products.html}">Best Seller</a></li>
+						</ul>
+					</nav>
+				</div>
+			</section>				
+			<section class="header_text sub">
+			<img class="pageBanner" src="themes/images/pageBanner.png" alt="New products" >
+				<h4><span>CheckOut</span></h4>
+			</section>	
+			<section class="main-content">
+				<div class="row">
+					<div class="span12">
+						<div class="accordion" id="accordion2">
+							<table class="table table-striped cart-items">
+							<thead>
+								<tr>
+									<th>Image</th>
+									<th>Product Name</th>
+									<th>Quantity</th>
+									<th>Unit Price</th>
+									<th>Sub-Total</th>
+								</tr>
+							</thead>
+							<tbody>					
+								<tr th:each="item : ${ListItem}" class="cart-row">
+									<td><a href="product_detail.html"><img alt="" th:src="@{${item.image}}" style="width:100px; height:100px"></a></td>
+									<td th:text="${item.title}"></td>
+									<td><input type="text" th:value="${item.quantity}" class="input-mini cart-quantity-input" readonly></td>
+									<td th:text="'$' + ${item.price}" id="price" class="cart-price"></td>
+									<td id="total" class="sub-total"></td>
+								</tr>
+								<tr>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th>Total: <span class="cart-total-price"></span></th>
+								</tr>		  
+							</tbody>
+						</table>
+						<form th:action="@{/confirm}" th:object="${Order}" method="POST" id="myform">
+							<div class="accordion-group">
+								<div class="accordion-heading">
+									<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">Account &amp; Billing Details</a>
+								</div>
+									<div class="accordion-inner">
+										<div class="row-fluid">
+											<div class="span6">
+												<h4>Your Personal Details</h4>
+												<div class="control-group">
+													<label class="control-label">Full Name:</label>
+													<div class="controls">
+														<div th:if="${user}"><input type="text" id="fullname" name="fullname" placeholder="" class="input-xlarge" th:value="${user.fullname}" required></div>
+														<div th:if="!${user}"><input type="text"  placeholder="" id="fullname" name="fullname" class="input-xlarge" required></div>
+													</div>
+												</div>					  
+												<div class="control-group">
+													<label class="control-label">Email:</label>
+													<div class="controls">
+														<input type="text" id="email" name="email" placeholder="" class="input-xlarge" th:value="${user}? ${user.email}: ''" required>
+													</div>
+												</div>
+												<div class="control-group">
+													<label class="control-label">Telephone:</label>
+													<div class="controls">
+														<input type="text" id="tel" name="tel" placeholder="" class="input-xlarge" th:value="${user}? ${user.tel}:''" required>
+													</div>
+												</div>
+											</div>
+											<div class="span6">
+												<h4>Your Address</h4>				  
+												<div class="control-group">
+													<label class="control-label"><span class="required">*</span> Address:</label>
+													<div class="controls">
+														<input type="text" th:field="*{address}" placeholder="" class="input-xlarge" required>
+													</div>
+												</div>
+												<div class="control-group">
+													<label class="control-label"><span class="required">*</span> Post Code:</label>
+													<div class="controls">
+														<input type="text" placeholder="" class="input-xlarge">
+													</div>
+												</div>
+												<div class="control-group">
+													<label class="control-label"><span class="required">*</span> Province:</label>
+													<div class="controls">
+														<select class="input-xlarge" required>
+															<option value="An Giang">An Giang</option>
+															<option value="Bà Rịa - Vũng Tàu">Bà Rịa - Vũng Tàu</option>
+															<option value="Bắc Giang">Bắc Giang</option>
+															<option value="Bắc Kạn">Bắc Kạn</option>
+															<option value="Bạc Liêu">Bạc Liêu</option>
+															<option value="Bắc Ninh">Bắc Ninh</option>
+															<option value="Bến Tre">Bến Tre</option>
+															<option value="Bình Định">Bình Định</option>
+															<option value="Bình Dương">Bình Dương</option>
+															<option value="Bình Phước">Bình Phước</option>
+															<option value="Bình Thuận">Bình Thuận</option>
+															<option value="Bình Thuận">Bình Thuận</option>
+															<option value="Cà Mau">Cà Mau</option>
+															<option value="Cao Bằng">Cao Bằng</option>
+															<option value="Đắk Lắk">Đắk Lắk</option>
+															<option value="Đắk Nông">Đắk Nông</option>
+															<option value="Điện Biên">Điện Biên</option>
+															<option value="Đồng Nai">Đồng Nai</option>
+															<option value="Đồng Tháp">Đồng Tháp</option>
+															<option value="Gia Lai">Gia Lai</option>
+															<option value="Hà Giang">Hà Giang</option>
+															<option value="Hà Nam">Hà Nam</option>
+															<option value="Hà Tĩnh">Hà Tĩnh</option>
+															<option value="Hải Dương">Hải Dương</option>
+															<option value="Hậu Giang">Hậu Giang</option>
+															<option value="Hòa Bình">Hòa Bình</option>
+															<option value="Hưng Yên">Hưng Yên</option>
+															<option value="Khánh Hòa">Khánh Hòa</option>
+															<option value="Kiên Giang">Kiên Giang</option>
+															<option value="Kon Tum">Kon Tum</option>
+															<option value="Lai Châu">Lai Châu</option>
+															<option value="Lâm Đồng">Lâm Đồng</option>
+															<option value="Lạng Sơn">Lạng Sơn</option>
+															<option value="Lào Cai">Lào Cai</option>
+															<option value="Long An">Long An</option>
+															<option value="Nam Định">Nam Định</option>
+															<option value="Nghệ An">Nghệ An</option>
+															<option value="Ninh Bình">Ninh Bình</option>
+															<option value="Ninh Thuận">Ninh Thuận</option>
+															<option value="Phú Thọ">Phú Thọ</option>
+															<option value="Quảng Bình">Quảng Bình</option>
+															<option value="Quảng Ngãi">Quảng Ngãi</option>
+															<option value="Quảng Ninh">Quảng Ninh</option>
+															<option value="Quảng Trị">Quảng Trị</option>
+															<option value="Sóc Trăng">Sóc Trăng</option>
+															<option value="Sơn La">Sơn La</option>
+															<option value="Tây Ninh">Tây Ninh</option>
+															<option value="Thái Bình">Thái Bình</option>
+															<option value="Thái Nguyên">Thái Nguyên</option>
+															<option value="Thanh Hóa">Thanh Hóa</option>
+															<option value="Thừa Thiên Huế">Thừa Thiên Huế</option>
+															<option value="Tiền Giang">Tiền Giang</option>
+															<option value="Trà Vinh">Trà Vinh</option>
+															<option value="Tuyên Quang">Tuyên Quang</option>
+															<option value="Vĩnh Long">Vĩnh Long</option>
+															<option value="Vĩnh Phúc">Vĩnh Phúc</option>
+															<option value="Yên Bái">Yên Bái</option>
+															<option value="Phú Yên">Phú Yên</option>
+															<option value="Tp.Cần Thơ">Tp.Cần Thơ</option>
+															<option value="Tp.Đà Nẵng">Tp.Đà Nẵng</option>
+															<option value="Tp.Hải Phòng">Tp.Hải Phòng</option>
+															<option value="Tp.Hà Nội">Tp.Hà Nội</option>
+															<option value="TP  HCM">TP HCM</option>
+														</select>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+							</div>
+							<div class="accordion-group">
+								<div class="accordion-heading">
+									<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">Confirm Order</a>
+								</div>
+									<div class="accordion-inner">
+										<div class="row-fluid">
+											<div class="control-group">
+												<label for="textarea" class="control-label">Comments</label>
+												<div class="controls">
+													<textarea rows="3" th:field="*{additional_info}" class="span12" form="myform"></textarea>
+												</div>
+											</div>									
+										<input class="btn btn-inverse pull-right" type="submit" value="Confirm">
+									</div>
+								</div>
+							</div>
+							</form>
+						</div>				
+					</div>
+				</div>
+			</section>			
+			<section id="footer-bar">
+				<div class="row">
+					<div class="span3">
+						<h4>Navigation</h4>
+						<ul class="nav">
+							<li><a th:href="@{/}">Homepage</a></li>  
+							<li><a th:href="@{/cart}">Your Cart</a></li>							
+						</ul>					
+					</div>
+					<div class="span4">
+						<h4>My Account</h4>
+						<ul class="nav">
+							<li><a href="#">My Account</a></li>
+							<li><a href="#">Order History</a></li>
+						</ul>
+					</div>
+					<div class="span5">
+						<p class="logo"><img src="themes/images/logo.png" class="site_logo" alt=""></p>
+						<p>GENUINE MEN'S FEMALE SPORTS CLOTHES HIGHLIGHTS</p>
+						<br/>
+					</div>					
+				</div>	
+			</section>
+			<section id="copyright">
+				<span>Copyright 2013 bootstrappage template  All right reserved.</span>
+			</section>
+		</div>
+		<script src="themes/js/common.js"></script>
+    </body>
+</html>
