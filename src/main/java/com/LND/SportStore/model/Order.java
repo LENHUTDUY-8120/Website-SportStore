@@ -15,4 +15,4 @@ public class Order {
 	private int total;
 	private String additional_info;
 	private int process;
-}
+}	
